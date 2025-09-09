@@ -1,0 +1,90 @@
+application {
+  config {
+    baseName petcare,
+    applicationType monolith,
+    packageName com.techwiz.petcare,
+    databaseType sql,
+    prodDatabaseType mysql,
+    devDatabaseType mysql,
+    buildTool maven,
+    authenticationType jwt,
+    testFrameworks [protractor]
+  }
+}
+
+entity User {
+  name String required maxlength(100),
+  email String required maxlength(100) unique,
+  passwordHash String required maxlength(255),
+  phone String maxlength(20),
+  address String maxlength(255),
+  role UserRole required,
+  createdAt Instant
+}
+
+enum UserRole {
+  OWNER, VET, SHELTER
+}
+
+entity Pet {
+  name String required maxlength(100),
+  species String maxlength(50),
+  breed String maxlength(50),
+  age Integer,
+  gender Gender,
+  photoUrl String maxlength(255),
+  createdAt Instant
+}
+
+enum Gender {
+  MALE, FEMALE
+}
+
+entity Appointment {
+  apptTime ZonedDateTime required,
+  status ApptStatus,
+  createdAt Instant
+}
+
+enum ApptStatus {
+  PENDING, CONFIRMED, CANCELLED, DONE
+}
+
+entity HealthRecord {
+  diagnosis TextBlob,
+  treatment TextBlob,
+  notes TextBlob,
+  createdAt Instant
+}
+
+relationship OneToMany {
+  User{pets} to Pet{owner}
+}
+
+relationship OneToMany {
+  Pet{appointments} to Appointment{pet}
+}
+
+relationship OneToMany {
+  User{appointments} to Appointment{owner}
+}
+
+relationship OneToMany {
+  User{vetAppointments} to Appointment{vet}
+}
+
+relationship OneToMany {
+  Pet{healthRecords} to HealthRecord{pet}
+}
+
+relationship OneToMany {
+  Appointment{healthRecords} to HealthRecord{appt}
+}
+
+relationship OneToMany {
+  User{vetHealthRecords} to HealthRecord{vet}
+}
+
+dto * with mapstruct
+service * with serviceClass
+paginate * with pagination

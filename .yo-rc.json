@@ -1,0 +1,18 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "petcare",
+    "buildTool": "maven",
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "entities": [],
+    "jhipsterVersion": "8.11.0",
+    "jwtSecretKey": "Y2NhN2ZhZTQ4MzBiZTExNDA5NjY0NzRlNWU2MGM4NWIzM2ZkOTBkNGYyODgwOTY4NDZiOTcyM2IwYWI2YTJlODBlY2M1N2IwMTY0YzUyYzEzYTVmZTAwZmQyMTYyNDc1NzNiMjA1MzFhODIwZjc5MTRiNTU2YTc2ZGNkNDQ1M2U=",
+    "languages": ["en"],
+    "nativeLanguage": "en",
+    "packageName": "com.techwiz.petcare",
+    "prodDatabaseType": "mysql",
+    "testFrameworks": ["protractor"]
+  }
+}
