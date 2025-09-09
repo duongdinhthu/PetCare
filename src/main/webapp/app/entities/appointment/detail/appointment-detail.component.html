@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (appointment(); as appointmentRef) {
+      <div>
+        <h2 data-cy="appointmentDetailsHeading"><span jhiTranslate="petcareApp.appointment.detail.title">Appointment</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ appointmentRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="petcareApp.appointment.petId">Pet Id</span></dt>
+          <dd>
+            <span>{{ appointmentRef.petId }}</span>
+          </dd>
+          <dt><span jhiTranslate="petcareApp.appointment.ownerId">Owner Id</span></dt>
+          <dd>
+            <span>{{ appointmentRef.ownerId }}</span>
+          </dd>
+          <dt><span jhiTranslate="petcareApp.appointment.vetId">Vet Id</span></dt>
+          <dd>
+            <span>{{ appointmentRef.vetId }}</span>
+          </dd>
+          <dt><span jhiTranslate="petcareApp.appointment.apptTime">Appt Time</span></dt>
+          <dd>
+            <span>{{ appointmentRef.apptTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="petcareApp.appointment.status">Status</span></dt>
+          <dd>
+            <span [jhiTranslate]="'petcareApp.ApptStatus.' + (appointmentRef.status ?? 'null')">{{
+              { null: '', PENDING: 'PENDING', CONFIRMED: 'CONFIRMED', CANCELLED: 'CANCELLED', DONE: 'DONE' }[
+                appointmentRef.status ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="petcareApp.appointment.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ appointmentRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/appointment', appointmentRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

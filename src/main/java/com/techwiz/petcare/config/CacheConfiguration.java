@@ -50,6 +50,9 @@ public class CacheConfiguration {
             createCache(cm, com.techwiz.petcare.domain.User.class.getName());
             createCache(cm, com.techwiz.petcare.domain.Authority.class.getName());
             createCache(cm, com.techwiz.petcare.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.techwiz.petcare.domain.Pet.class.getName());
+            createCache(cm, com.techwiz.petcare.domain.Appointment.class.getName());
+            createCache(cm, com.techwiz.petcare.domain.HealthRecord.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

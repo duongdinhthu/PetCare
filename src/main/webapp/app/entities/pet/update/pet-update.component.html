@@ -1,0 +1,148 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-pet-heading" data-cy="PetCreateUpdateHeading" jhiTranslate="petcareApp.pet.home.createOrEditLabel">
+        Create or edit a Pet
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="petcareApp.pet.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let ownerIdRef = editForm.get('ownerId')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_ownerId" jhiTranslate="petcareApp.pet.ownerId">Owner Id</label>
+          <input type="number" class="form-control" name="ownerId" id="field_ownerId" data-cy="ownerId" formControlName="ownerId" />
+          @if (ownerIdRef.invalid && (ownerIdRef.dirty || ownerIdRef.touched)) {
+            <div>
+              @if (editForm.get('ownerId')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('ownerId')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let nameRef = editForm.get('name')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_name" jhiTranslate="petcareApp.pet.name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+          @if (nameRef.invalid && (nameRef.dirty || nameRef.touched)) {
+            <div>
+              @if (editForm.get('name')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('name')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
+                  >This field cannot be longer than 100 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        @let speciesRef = editForm.get('species')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_species" jhiTranslate="petcareApp.pet.species">Species</label>
+          <input type="text" class="form-control" name="species" id="field_species" data-cy="species" formControlName="species" />
+          @if (speciesRef.invalid && (speciesRef.dirty || speciesRef.touched)) {
+            <div>
+              @if (editForm.get('species')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '50' }"
+                  >This field cannot be longer than 50 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        @let breedRef = editForm.get('breed')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_breed" jhiTranslate="petcareApp.pet.breed">Breed</label>
+          <input type="text" class="form-control" name="breed" id="field_breed" data-cy="breed" formControlName="breed" />
+          @if (breedRef.invalid && (breedRef.dirty || breedRef.touched)) {
+            <div>
+              @if (editForm.get('breed')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '50' }"
+                  >This field cannot be longer than 50 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_age" jhiTranslate="petcareApp.pet.age">Age</label>
+          <input type="number" class="form-control" name="age" id="field_age" data-cy="age" formControlName="age" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_gender" jhiTranslate="petcareApp.pet.gender">Gender</label>
+          <select class="form-control" name="gender" formControlName="gender" id="field_gender" data-cy="gender">
+            <option [ngValue]="null">{{ 'petcareApp.Gender.null' | translate }}</option>
+            @for (gender of genderValues; track $index) {
+              <option [value]="gender">{{ 'petcareApp.Gender.' + gender | translate }}</option>
+            }
+          </select>
+        </div>
+
+        @let photoUrlRef = editForm.get('photoUrl')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_photoUrl" jhiTranslate="petcareApp.pet.photoUrl">Photo Url</label>
+          <input type="text" class="form-control" name="photoUrl" id="field_photoUrl" data-cy="photoUrl" formControlName="photoUrl" />
+          @if (photoUrlRef.invalid && (photoUrlRef.dirty || photoUrlRef.touched)) {
+            <div>
+              @if (editForm.get('photoUrl')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '255' }"
+                  >This field cannot be longer than 255 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_createdAt" jhiTranslate="petcareApp.pet.createdAt">Created At</label>
+          <div class="d-flex">
+            <input
+              id="field_createdAt"
+              data-cy="createdAt"
+              type="datetime-local"
+              class="form-control"
+              name="createdAt"
+              formControlName="createdAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

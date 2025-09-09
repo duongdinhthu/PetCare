@@ -1,0 +1,11 @@
+id;pet_id;vet_id;appt_id;diagnosis;treatment;notes;created_at
+1;8215;23409;4460;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2025-09-08T22:45:57
+2;21306;21537;10916;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2025-09-09T05:04:43
+3;31595;28679;2664;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2025-09-09T02:45:21
+4;15437;32672;31135;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2025-09-09T01:03:38
+5;26262;22442;7037;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2025-09-08T17:03:54
+6;14978;1543;17724;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2025-09-08T15:48:24
+7;27339;23165;22368;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2025-09-08T19:35:55
+8;6152;22146;14437;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2025-09-09T05:58:47
+9;25588;1734;21145;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2025-09-09T06:00:30
+10;14563;15104;28818;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2025-09-09T00:40:06

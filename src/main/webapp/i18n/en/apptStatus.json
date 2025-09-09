@@ -1,0 +1,11 @@
+{
+  "petcareApp": {
+    "ApptStatus": {
+      "null": "",
+      "PENDING": "PENDING",
+      "CONFIRMED": "CONFIRMED",
+      "CANCELLED": "CANCELLED",
+      "DONE": "DONE"
+    }
+  }
+}

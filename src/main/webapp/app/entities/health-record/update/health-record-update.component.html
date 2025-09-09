@@ -1,0 +1,121 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-health-record-heading"
+        data-cy="HealthRecordCreateUpdateHeading"
+        jhiTranslate="petcareApp.healthRecord.home.createOrEditLabel"
+      >
+        Create or edit a Health Record
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="petcareApp.healthRecord.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let petIdRef = editForm.get('petId')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_petId" jhiTranslate="petcareApp.healthRecord.petId">Pet Id</label>
+          <input type="number" class="form-control" name="petId" id="field_petId" data-cy="petId" formControlName="petId" />
+          @if (petIdRef.invalid && (petIdRef.dirty || petIdRef.touched)) {
+            <div>
+              @if (editForm.get('petId')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('petId')?.errors?.number" jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let vetIdRef = editForm.get('vetId')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_vetId" jhiTranslate="petcareApp.healthRecord.vetId">Vet Id</label>
+          <input type="number" class="form-control" name="vetId" id="field_vetId" data-cy="vetId" formControlName="vetId" />
+          @if (vetIdRef.invalid && (vetIdRef.dirty || vetIdRef.touched)) {
+            <div>
+              @if (editForm.get('vetId')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('vetId')?.errors?.number" jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let apptIdRef = editForm.get('apptId')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_apptId" jhiTranslate="petcareApp.healthRecord.apptId">Appt Id</label>
+          <input type="number" class="form-control" name="apptId" id="field_apptId" data-cy="apptId" formControlName="apptId" />
+          @if (apptIdRef.invalid && (apptIdRef.dirty || apptIdRef.touched)) {
+            <div>
+              @if (editForm.get('apptId')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('apptId')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_diagnosis" jhiTranslate="petcareApp.healthRecord.diagnosis">Diagnosis</label>
+          <textarea class="form-control" name="diagnosis" id="field_diagnosis" data-cy="diagnosis" formControlName="diagnosis"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_treatment" jhiTranslate="petcareApp.healthRecord.treatment">Treatment</label>
+          <textarea class="form-control" name="treatment" id="field_treatment" data-cy="treatment" formControlName="treatment"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_notes" jhiTranslate="petcareApp.healthRecord.notes">Notes</label>
+          <textarea class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_createdAt" jhiTranslate="petcareApp.healthRecord.createdAt">Created At</label>
+          <div class="d-flex">
+            <input
+              id="field_createdAt"
+              data-cy="createdAt"
+              type="datetime-local"
+              class="form-control"
+              name="createdAt"
+              formControlName="createdAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

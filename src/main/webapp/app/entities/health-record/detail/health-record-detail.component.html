@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (healthRecord(); as healthRecordRef) {
+      <div>
+        <h2 data-cy="healthRecordDetailsHeading"><span jhiTranslate="petcareApp.healthRecord.detail.title">Health Record</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ healthRecordRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="petcareApp.healthRecord.petId">Pet Id</span></dt>
+          <dd>
+            <span>{{ healthRecordRef.petId }}</span>
+          </dd>
+          <dt><span jhiTranslate="petcareApp.healthRecord.vetId">Vet Id</span></dt>
+          <dd>
+            <span>{{ healthRecordRef.vetId }}</span>
+          </dd>
+          <dt><span jhiTranslate="petcareApp.healthRecord.apptId">Appt Id</span></dt>
+          <dd>
+            <span>{{ healthRecordRef.apptId }}</span>
+          </dd>
+          <dt><span jhiTranslate="petcareApp.healthRecord.diagnosis">Diagnosis</span></dt>
+          <dd>
+            <span>{{ healthRecordRef.diagnosis }}</span>
+          </dd>
+          <dt><span jhiTranslate="petcareApp.healthRecord.treatment">Treatment</span></dt>
+          <dd>
+            <span>{{ healthRecordRef.treatment }}</span>
+          </dd>
+          <dt><span jhiTranslate="petcareApp.healthRecord.notes">Notes</span></dt>
+          <dd>
+            <span>{{ healthRecordRef.notes }}</span>
+          </dd>
+          <dt><span jhiTranslate="petcareApp.healthRecord.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ healthRecordRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/health-record', healthRecordRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -12,7 +12,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.5</version>
+        <version>3.2.5</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
@@ -84,6 +84,7 @@
             <artifactId>jhipster-framework</artifactId>
             <version>${jhipster-framework.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
@@ -212,6 +213,7 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus-simpleclient</artifactId>
+            <version>1.14.6</version>
         </dependency>
         <dependency>
             <groupId>jakarta.annotation</groupId>
@@ -283,6 +285,7 @@
             <artifactId>mysql</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>

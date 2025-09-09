@@ -1,0 +1,151 @@
+<div>
+  <h2 id="page-heading" data-cy="HealthRecordHeading">
+    <span jhiTranslate="petcareApp.healthRecord.home.title">Health Records</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="petcareApp.healthRecord.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-health-record"
+        [routerLink]="['/health-record/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="petcareApp.healthRecord.home.createLabel">Create a new Health Record</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  @if (healthRecords().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="petcareApp.healthRecord.home.notFound">No Health Records found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="petId">
+              <div class="d-flex">
+                <span jhiTranslate="petcareApp.healthRecord.petId">Pet Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vetId">
+              <div class="d-flex">
+                <span jhiTranslate="petcareApp.healthRecord.vetId">Vet Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="apptId">
+              <div class="d-flex">
+                <span jhiTranslate="petcareApp.healthRecord.apptId">Appt Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="diagnosis">
+              <div class="d-flex">
+                <span jhiTranslate="petcareApp.healthRecord.diagnosis">Diagnosis</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="treatment">
+              <div class="d-flex">
+                <span jhiTranslate="petcareApp.healthRecord.treatment">Treatment</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="notes">
+              <div class="d-flex">
+                <span jhiTranslate="petcareApp.healthRecord.notes">Notes</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="createdAt">
+              <div class="d-flex">
+                <span jhiTranslate="petcareApp.healthRecord.createdAt">Created At</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (healthRecord of healthRecords(); track trackId(healthRecord)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/health-record', healthRecord.id, 'view']">{{ healthRecord.id }}</a>
+              </td>
+              <td>{{ healthRecord.petId }}</td>
+              <td>{{ healthRecord.vetId }}</td>
+              <td>{{ healthRecord.apptId }}</td>
+              <td>{{ healthRecord.diagnosis }}</td>
+              <td>{{ healthRecord.treatment }}</td>
+              <td>{{ healthRecord.notes }}</td>
+              <td>{{ healthRecord.createdAt | formatMediumDatetime }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/health-record', healthRecord.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/health-record', healthRecord.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(healthRecord)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (healthRecords().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page, totalItems, itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

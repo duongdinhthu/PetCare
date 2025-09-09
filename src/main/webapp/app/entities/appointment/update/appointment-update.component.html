@@ -1,0 +1,145 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-appointment-heading"
+        data-cy="AppointmentCreateUpdateHeading"
+        jhiTranslate="petcareApp.appointment.home.createOrEditLabel"
+      >
+        Create or edit a Appointment
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="petcareApp.appointment.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let petIdRef = editForm.get('petId')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_petId" jhiTranslate="petcareApp.appointment.petId">Pet Id</label>
+          <input type="number" class="form-control" name="petId" id="field_petId" data-cy="petId" formControlName="petId" />
+          @if (petIdRef.invalid && (petIdRef.dirty || petIdRef.touched)) {
+            <div>
+              @if (editForm.get('petId')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('petId')?.errors?.number" jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let ownerIdRef = editForm.get('ownerId')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_ownerId" jhiTranslate="petcareApp.appointment.ownerId">Owner Id</label>
+          <input type="number" class="form-control" name="ownerId" id="field_ownerId" data-cy="ownerId" formControlName="ownerId" />
+          @if (ownerIdRef.invalid && (ownerIdRef.dirty || ownerIdRef.touched)) {
+            <div>
+              @if (editForm.get('ownerId')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('ownerId')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let vetIdRef = editForm.get('vetId')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_vetId" jhiTranslate="petcareApp.appointment.vetId">Vet Id</label>
+          <input type="number" class="form-control" name="vetId" id="field_vetId" data-cy="vetId" formControlName="vetId" />
+          @if (vetIdRef.invalid && (vetIdRef.dirty || vetIdRef.touched)) {
+            <div>
+              @if (editForm.get('vetId')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('vetId')?.errors?.number" jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let apptTimeRef = editForm.get('apptTime')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_apptTime" jhiTranslate="petcareApp.appointment.apptTime">Appt Time</label>
+          <div class="d-flex">
+            <input
+              id="field_apptTime"
+              data-cy="apptTime"
+              type="datetime-local"
+              class="form-control"
+              name="apptTime"
+              formControlName="apptTime"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (apptTimeRef.invalid && (apptTimeRef.dirty || apptTimeRef.touched)) {
+            <div>
+              @if (editForm.get('apptTime')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('apptTime')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >This field should be a date and time.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_status" jhiTranslate="petcareApp.appointment.status">Status</label>
+          <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
+            <option [ngValue]="null">{{ 'petcareApp.ApptStatus.null' | translate }}</option>
+            @for (apptStatus of apptStatusValues; track $index) {
+              <option [value]="apptStatus">{{ 'petcareApp.ApptStatus.' + apptStatus | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_createdAt" jhiTranslate="petcareApp.appointment.createdAt">Created At</label>
+          <div class="d-flex">
+            <input
+              id="field_createdAt"
+              data-cy="createdAt"
+              type="datetime-local"
+              class="form-control"
+              name="createdAt"
+              formControlName="createdAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

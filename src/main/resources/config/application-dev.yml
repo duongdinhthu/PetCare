@@ -56,6 +56,11 @@ spring:
   thymeleaf:
     cache: false
 
+  # Tắt docker compose cho môi trường dev
+  docker:
+    compose:
+      enabled: false
+
 server:
   port: 8080
   # make sure requests the proxy uri instead of the server one
@@ -86,7 +91,7 @@ jhipster:
   security:
     authentication:
       jwt:
-        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+        # This token must be encoded using Base64 and be at least 256 bits long
         base64-secret: Y2NhN2ZhZTQ4MzBiZTExNDA5NjY0NzRlNWU2MGM4NWIzM2ZkOTBkNGYyODgwOTY4NDZiOTcyM2IwYWI2YTJlODBlY2M1N2IwMTY0YzUyYzEzYTVmZTAwZmQyMTYyNDc1NzNiMjA1MzFhODIwZjc5MTRiNTU2YTc2ZGNkNDQ1M2U=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
@@ -100,6 +105,7 @@ jhipster:
       host: localhost
       port: 5000
       ring-buffer-size: 512
+
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
@@ -110,3 +116,12 @@ jhipster:
 # ===================================================================
 
 # application:
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
