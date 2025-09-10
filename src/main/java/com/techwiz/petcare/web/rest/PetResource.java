@@ -1,7 +1,9 @@
 package com.techwiz.petcare.web.rest;
 
 import com.techwiz.petcare.repository.PetRepository;
+import com.techwiz.petcare.service.PetQueryService;
 import com.techwiz.petcare.service.PetService;
+import com.techwiz.petcare.service.criteria.PetCriteria;
 import com.techwiz.petcare.service.dto.PetDTO;
 import com.techwiz.petcare.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -42,9 +44,12 @@ public class PetResource {
 
     private final PetRepository petRepository;
 
-    public PetResource(PetService petService, PetRepository petRepository) {
+    private final PetQueryService petQueryService;
+
+    public PetResource(PetService petService, PetRepository petRepository, PetQueryService petQueryService) {
         this.petService = petService;
         this.petRepository = petRepository;
+        this.petQueryService = petQueryService;
     }
 
     /**
@@ -137,14 +142,31 @@ public class PetResource {
      * {@code GET  /pets} : get all the pets.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of pets in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<PetDTO>> getAllPets(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.debug("REST request to get a page of Pets");
-        Page<PetDTO> page = petService.findAll(pageable);
+    public ResponseEntity<List<PetDTO>> getAllPets(
+        PetCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get Pets by criteria: {}", criteria);
+
+        Page<PetDTO> page = petQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /pets/count} : count all the pets.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countPets(PetCriteria criteria) {
+        LOG.debug("REST request to count Pets by criteria: {}", criteria);
+        return ResponseEntity.ok().body(petQueryService.countByCriteria(criteria));
     }
 
     /**

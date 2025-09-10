@@ -7,8 +7,6 @@ import com.techwiz.petcare.service.mapper.AppointmentMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,18 +72,6 @@ public class AppointmentService {
             })
             .map(appointmentRepository::save)
             .map(appointmentMapper::toDto);
-    }
-
-    /**
-     * Get all the appointments.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public Page<AppointmentDTO> findAll(Pageable pageable) {
-        LOG.debug("Request to get all Appointments");
-        return appointmentRepository.findAll(pageable).map(appointmentMapper::toDto);
     }
 
     /**

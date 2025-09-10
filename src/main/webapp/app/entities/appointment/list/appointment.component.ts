@@ -9,17 +9,27 @@ import { SortByDirective, SortDirective, SortService, type SortState, sortStateS
 import { FormatMediumDatetimePipe } from 'app/shared/date';
 import { ItemCountComponent } from 'app/shared/pagination';
 import { FormsModule } from '@angular/forms';
-
 import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { DEFAULT_SORT_DATA, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
+import { FilterComponent, FilterOptions, IFilterOption, IFilterOptions } from 'app/shared/filter';
 import { IAppointment } from '../appointment.model';
+
 import { AppointmentService, EntityArrayResponseType } from '../service/appointment.service';
 import { AppointmentDeleteDialogComponent } from '../delete/appointment-delete-dialog.component';
 
 @Component({
   selector: 'jhi-appointment',
   templateUrl: './appointment.component.html',
-  imports: [RouterModule, FormsModule, SharedModule, SortDirective, SortByDirective, FormatMediumDatetimePipe, ItemCountComponent],
+  imports: [
+    RouterModule,
+    FormsModule,
+    SharedModule,
+    SortDirective,
+    SortByDirective,
+    FormatMediumDatetimePipe,
+    FilterComponent,
+    ItemCountComponent,
+  ],
 })
 export class AppointmentComponent implements OnInit {
   subscription: Subscription | null = null;
@@ -27,6 +37,7 @@ export class AppointmentComponent implements OnInit {
   isLoading = false;
 
   sortState = sortStateSignal({});
+  filters: IFilterOptions = new FilterOptions();
 
   itemsPerPage = ITEMS_PER_PAGE;
   totalItems = 0;
@@ -48,6 +59,8 @@ export class AppointmentComponent implements OnInit {
         tap(() => this.load()),
       )
       .subscribe();
+
+    this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.sortState(), filterOptions));
   }
 
   delete(appointment: IAppointment): void {
@@ -71,17 +84,18 @@ export class AppointmentComponent implements OnInit {
   }
 
   navigateToWithComponentValues(event: SortState): void {
-    this.handleNavigation(this.page, event);
+    this.handleNavigation(this.page, event, this.filters.filterOptions);
   }
 
   navigateToPage(page: number): void {
-    this.handleNavigation(page, this.sortState());
+    this.handleNavigation(page, this.sortState(), this.filters.filterOptions);
   }
 
   protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
     const page = params.get(PAGE_HEADER);
     this.page = +(page ?? 1);
     this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
+    this.filters.initializeFromParams(params);
   }
 
   protected onResponseSuccess(response: EntityArrayResponseType): void {
@@ -99,7 +113,7 @@ export class AppointmentComponent implements OnInit {
   }
 
   protected queryBackend(): Observable<EntityArrayResponseType> {
-    const { page } = this;
+    const { page, filters } = this;
 
     this.isLoading = true;
     const pageToLoad: number = page;
@@ -108,15 +122,22 @@ export class AppointmentComponent implements OnInit {
       size: this.itemsPerPage,
       sort: this.sortService.buildSortParam(this.sortState()),
     };
+    filters.filterOptions.forEach(filterOption => {
+      queryObject[filterOption.name] = filterOption.values;
+    });
     return this.appointmentService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
   }
 
-  protected handleNavigation(page: number, sortState: SortState): void {
-    const queryParamsObj = {
+  protected handleNavigation(page: number, sortState: SortState, filterOptions?: IFilterOption[]): void {
+    const queryParamsObj: any = {
       page,
       size: this.itemsPerPage,
       sort: this.sortService.buildSortParam(sortState),
     };
+
+    filterOptions?.forEach(filterOption => {
+      queryParamsObj[filterOption.nameAsQueryParam()] = filterOption.values;
+    });
 
     this.ngZone.run(() => {
       this.router.navigate(['./'], {

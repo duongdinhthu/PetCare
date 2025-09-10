@@ -7,8 +7,6 @@ import com.techwiz.petcare.service.mapper.PetMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,18 +72,6 @@ public class PetService {
             })
             .map(petRepository::save)
             .map(petMapper::toDto);
-    }
-
-    /**
-     * Get all the pets.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public Page<PetDTO> findAll(Pageable pageable) {
-        LOG.debug("Request to get all Pets");
-        return petRepository.findAll(pageable).map(petMapper::toDto);
     }
 
     /**

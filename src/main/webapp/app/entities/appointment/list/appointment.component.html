@@ -24,6 +24,8 @@
 
   <jhi-alert />
 
+  <jhi-filter [filters]="filters" />
+
   @if (appointments().length === 0) {
     <div class="alert alert-warning" id="no-result">
       <span jhiTranslate="petcareApp.appointment.home.notFound">No Appointments found</span>

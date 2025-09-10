@@ -48,6 +48,7 @@
       "fieldType": "Instant"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "name": "Pet",
   "pagination": "pagination",
   "relationships": [],

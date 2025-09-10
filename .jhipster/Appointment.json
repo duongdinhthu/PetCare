@@ -35,6 +35,7 @@
       "fieldType": "Instant"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "name": "Appointment",
   "pagination": "pagination",
   "relationships": [],

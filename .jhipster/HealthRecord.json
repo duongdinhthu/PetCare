@@ -37,6 +37,7 @@
       "fieldType": "Instant"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "name": "HealthRecord",
   "pagination": "pagination",
   "relationships": [],

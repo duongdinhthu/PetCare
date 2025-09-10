@@ -1,7 +1,9 @@
 package com.techwiz.petcare.web.rest;
 
 import com.techwiz.petcare.repository.HealthRecordRepository;
+import com.techwiz.petcare.service.HealthRecordQueryService;
 import com.techwiz.petcare.service.HealthRecordService;
+import com.techwiz.petcare.service.criteria.HealthRecordCriteria;
 import com.techwiz.petcare.service.dto.HealthRecordDTO;
 import com.techwiz.petcare.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -42,9 +44,16 @@ public class HealthRecordResource {
 
     private final HealthRecordRepository healthRecordRepository;
 
-    public HealthRecordResource(HealthRecordService healthRecordService, HealthRecordRepository healthRecordRepository) {
+    private final HealthRecordQueryService healthRecordQueryService;
+
+    public HealthRecordResource(
+        HealthRecordService healthRecordService,
+        HealthRecordRepository healthRecordRepository,
+        HealthRecordQueryService healthRecordQueryService
+    ) {
         this.healthRecordService = healthRecordService;
         this.healthRecordRepository = healthRecordRepository;
+        this.healthRecordQueryService = healthRecordQueryService;
     }
 
     /**
@@ -140,14 +149,31 @@ public class HealthRecordResource {
      * {@code GET  /health-records} : get all the healthRecords.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of healthRecords in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<HealthRecordDTO>> getAllHealthRecords(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.debug("REST request to get a page of HealthRecords");
-        Page<HealthRecordDTO> page = healthRecordService.findAll(pageable);
+    public ResponseEntity<List<HealthRecordDTO>> getAllHealthRecords(
+        HealthRecordCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get HealthRecords by criteria: {}", criteria);
+
+        Page<HealthRecordDTO> page = healthRecordQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /health-records/count} : count all the healthRecords.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countHealthRecords(HealthRecordCriteria criteria) {
+        LOG.debug("REST request to count HealthRecords by criteria: {}", criteria);
+        return ResponseEntity.ok().body(healthRecordQueryService.countByCriteria(criteria));
     }
 
     /**

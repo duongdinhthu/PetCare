@@ -1,7 +1,9 @@
 package com.techwiz.petcare.web.rest;
 
 import com.techwiz.petcare.repository.AppointmentRepository;
+import com.techwiz.petcare.service.AppointmentQueryService;
 import com.techwiz.petcare.service.AppointmentService;
+import com.techwiz.petcare.service.criteria.AppointmentCriteria;
 import com.techwiz.petcare.service.dto.AppointmentDTO;
 import com.techwiz.petcare.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -42,9 +44,16 @@ public class AppointmentResource {
 
     private final AppointmentRepository appointmentRepository;
 
-    public AppointmentResource(AppointmentService appointmentService, AppointmentRepository appointmentRepository) {
+    private final AppointmentQueryService appointmentQueryService;
+
+    public AppointmentResource(
+        AppointmentService appointmentService,
+        AppointmentRepository appointmentRepository,
+        AppointmentQueryService appointmentQueryService
+    ) {
         this.appointmentService = appointmentService;
         this.appointmentRepository = appointmentRepository;
+        this.appointmentQueryService = appointmentQueryService;
     }
 
     /**
@@ -139,14 +148,31 @@ public class AppointmentResource {
      * {@code GET  /appointments} : get all the appointments.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of appointments in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<AppointmentDTO>> getAllAppointments(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.debug("REST request to get a page of Appointments");
-        Page<AppointmentDTO> page = appointmentService.findAll(pageable);
+    public ResponseEntity<List<AppointmentDTO>> getAllAppointments(
+        AppointmentCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get Appointments by criteria: {}", criteria);
+
+        Page<AppointmentDTO> page = appointmentQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /appointments/count} : count all the appointments.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countAppointments(AppointmentCriteria criteria) {
+        LOG.debug("REST request to count Appointments by criteria: {}", criteria);
+        return ResponseEntity.ok().body(appointmentQueryService.countByCriteria(criteria));
     }
 
     /**

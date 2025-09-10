@@ -24,6 +24,8 @@
 
   <jhi-alert />
 
+  <jhi-filter [filters]="filters" />
+
   @if (pets().length === 0) {
     <div class="alert alert-warning" id="no-result">
       <span jhiTranslate="petcareApp.pet.home.notFound">No Pets found</span>

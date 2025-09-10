@@ -46,6 +46,7 @@
       "fieldType": "Instant"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "name": "User",
   "pagination": "pagination",
   "relationships": [],

@@ -54,3 +54,4 @@ entity HealthRecord {
 dto * with mapstruct
 service * with serviceClass
 paginate * with pagination
+filter User,HealthRecord,Appointment,Pet

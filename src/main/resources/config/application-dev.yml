@@ -44,6 +44,10 @@ spring:
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
   liquibase:
+    parameters:
+      DATETIMETYPE: datetime
+      # disable validation
+    clear-checksums: true
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
   mail:
