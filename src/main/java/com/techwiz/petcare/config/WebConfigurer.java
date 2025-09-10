@@ -57,9 +57,15 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
 
     private void setLocationForStaticAssets(WebServerFactory server) {
         if (server instanceof ConfigurableServletWebServerFactory servletWebServer) {
-            File root;
             String prefixPath = resolvePathPrefix();
-            root = Path.of(prefixPath + "target/classes/static/").toFile();
+
+            // nếu prefixPath bắt đầu bằng "/E:/" thì cắt đi dấu "/"
+            if (prefixPath.startsWith("/") && prefixPath.length() > 2 && prefixPath.charAt(2) == ':') {
+                prefixPath = prefixPath.substring(1);
+            }
+
+            File root = Path.of(prefixPath, "target", "classes", "static").toFile();
+
             if (root.exists() && root.isDirectory()) {
                 servletWebServer.setDocumentRoot(root);
             }
